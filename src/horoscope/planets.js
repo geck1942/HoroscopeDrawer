@@ -1,58 +1,71 @@
 class Planets {
   constructor() {
-    const svgImagePath = "./resources/svg/planets/";
+    const pngImagePath = "./resources/celestialchapters/planets/";
 
-    return [{
+    var planets = [{
       number: 1,
       name: "Sun",
       symbol: "☉",
-      imageUrl: svgImagePath + "sun.svg",
+      imageUrl: pngImagePath + "sun.png",
     }, {
       number: 2,
       name: "Mercury",
       symbol: "☿",
-      imageUrl: svgImagePath + "mercury.svg",
+      imageUrl: pngImagePath + "mercury.png",
     }, {
       number: 3,
       name: "Venus",
       symbol: "♀",
-      imageUrl: svgImagePath + "venus.svg",
+      imageUrl: pngImagePath + "venus.png",
     }, {
       number: 4,
       name: "Mars",
       symbol: "♂",
-      imageUrl: svgImagePath + "mars.svg",
+      imageUrl: pngImagePath + "mars.png",
     }, {
       number: 5,
       name: "Moon",
       symbol: "☽",
-      imageUrl: svgImagePath + "moon.svg",
+      imageUrl: pngImagePath + "moon.png",
     }, {
       number: 6,
       name: "Jupiter",
       symbol: "♃",
-      imageUrl: svgImagePath + "jupiter.svg",
+      imageUrl: pngImagePath + "jupiter.png",
     }, {
       number: 7,
       name: "Saturn",
       symbol: "♄",
-      imageUrl: svgImagePath + "saturn.svg",
+      imageUrl: pngImagePath + "saturn.png",
     }, {
       number: 8,
       name: "Uranus",
       symbol: "⛢",
-      imageUrl: svgImagePath + "uranus.svg",
+      imageUrl: pngImagePath + "uranus.png",
     }, {
       number: 9,
       name: "Neptune",
       symbol: "♆",
-      imageUrl: svgImagePath + "neptune.svg",
+      imageUrl: pngImagePath + "neptune.png",
     }, {
       number: 10,
       name: "Pluto",
       symbol: "♇",
-      imageUrl: svgImagePath + "pluto.svg",
+      imageUrl: pngImagePath + "pluto.png",
     }];
+
+    // var canvas = document.getElementById("loader-canvas");
+    // planets.forEach(planet => {
+    //   console.log("init " + planet.name);
+    //   var image = new Image();
+    //   canvas.appendChild(planet.image);
+    //   image.onload = function(){
+
+    //   }
+    //   image.src = planet.imageUrl;
+    // });
+
+    return planets;
   }
 }
 export let planets = new Planets();

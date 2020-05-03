@@ -1,89 +1,89 @@
-import {elements} from "./elements";
+import { elements } from "./elements";
 
 export class Zodiac {
   constructor() {
-    this.svgImagePath = "./resources/svg/zodiac/";
+    this.pngImagePath = "./resources/celestialchapters/signs/";
     this.radius = {
       outer: 50,
       inner: 43,
-      get innerAuxiliary () {
+      get innerAuxiliary() {
         return this.inner + 0.5;
       },
-      get betweenOuterInner () {
+      get betweenOuterInner() {
         return this.outer - ((this.outer - this.inner) / 2);
       }
     };
     this.signs = [{
-      number: 1,
+      number: 0,
       name: "Aries",
       symbol: "♈",
-      imageUrl: this.svgImagePath + "aries.svg",
+      imageUrl: this.pngImagePath + "aries.png",
       element: "fire"
     }, {
-      number: 2,
+      number: 1,
       name: "Taurus",
       symbol: "♉",
-      imageUrl: this.svgImagePath + "taurus.svg",
+      imageUrl: this.pngImagePath + "taurus.png",
       element: "earth"
     }, {
-      number: 3,
+      number: 2,
       name: "Gemini",
       symbol: "♊",
-      imageUrl: this.svgImagePath + "gemini.svg",
+      imageUrl: this.pngImagePath + "gemini.png",
       element: "wind"
     }, {
-      number: 4,
+      number: 3,
       name: "Cancer",
       symbol: "♋",
-      imageUrl: this.svgImagePath + "cancer.svg",
+      imageUrl: this.pngImagePath + "cancer.png",
       element: "water"
     }, {
-      number: 5,
+      number: 4,
       name: "Leo",
       symbol: "♌",
-      imageUrl: this.svgImagePath + "leo.svg",
+      imageUrl: this.pngImagePath + "leo.png",
       element: "fire"
     }, {
-      number: 6,
+      number: 5,
       name: "Virgo",
       symbol: "♍",
-      imageUrl: this.svgImagePath + "virgo.svg",
+      imageUrl: this.pngImagePath + "virgo.png",
       element: "earth"
     }, {
-      number: 7,
+      number: 6,
       name: "Libra",
       symbol: "♎",
-      imageUrl: this.svgImagePath + "libra.svg",
+      imageUrl: this.pngImagePath + "libra.png",
       element: "wind"
     }, {
-      number: 8,
+      number: 7,
       name: "Scorpio",
       symbol: "♏",
-      imageUrl: this.svgImagePath + "scorpio.svg",
+      imageUrl: this.pngImagePath + "scorpio.png",
       element: "water"
     }, {
-      number: 9,
+      number: 8,
       name: "Sagittarius",
       symbol: "♐",
-      imageUrl: this.svgImagePath + "sagittarius.svg",
+      imageUrl: this.pngImagePath + "sagittarius.png",
       element: "fire"
     }, {
-      number: 10,
+      number: 9,
       name: "Capricorn",
       symbol: "♑",
-      imageUrl: this.svgImagePath + "capricorn.svg",
+      imageUrl: this.pngImagePath + "capricorn.png",
       element: "earth"
     }, {
-      number: 11,
+      number: 10,
       name: "Aquarius",
       symbol: "♒",
-      imageUrl: this.svgImagePath + "aquarius.svg",
+      imageUrl: this.pngImagePath + "aquarius.png",
       element: "wind"
     }, {
-      number: 12,
+      number: 11,
       name: "Pisces",
       symbol: "♓",
-      imageUrl: this.svgImagePath + "pisces.svg",
+      imageUrl: this.pngImagePath + "pisces.png",
       element: "water"
     }];
 

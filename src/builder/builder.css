@@ -1,0 +1,55 @@
+
+body{
+  display: flex;
+}
+.preview {
+  width: 62%;  
+  padding: 1em; 
+  background: url(./resources/celestialchapters/backgrounds/CCbackgroundblue.jpg);
+}
+.tools {
+  width: 38%;
+  display: flex;
+  flex-direction: column;
+} 
+.tool { 
+  height: 48px;
+}
+
+   
+
+svg { 
+  display: block;
+  margin: 0 auto;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+circle {
+  fill: transparent;
+}
+
+line {
+  fill: transparent;
+  stroke: rgb(187, 138, 54);
+  stroke-width: 0.25px;
+}
+
+path { 
+  fill: transparent;
+  stroke: rgb(187, 138, 54);
+  stroke-width: 0.25px;
+}
+/* 
+.zodiac-sign-element-wind {
+  fill: #fdc340;
+}
+.zodiac-sign-element-water {
+  fill: #708ef8;
+}
+.zodiac-sign-element-fire {
+  fill: #fc4d4d;
+}
+.zodiac-sign-element-earth {
+  fill: #53db42;
+} */

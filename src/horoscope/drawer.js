@@ -1,7 +1,7 @@
 import Snap from "snapsvg/dist/snap.svg-min";
-import {Calc} from "./calc";
-import {zodiac} from "./zodiac";
-import {planets} from "./planets";
+import { Calc } from "./calc";
+import { zodiac } from "./zodiac";
+import { planets } from "./planets";
 
 export class Drawer {
   draw(properties) {
@@ -11,8 +11,8 @@ export class Drawer {
       throw new Error('Irregular selector');
     }
 
-    this.PLANET_IMAGE_WIDTH = 4;
-    this.PLANET_IMAGE_HEIGHT = 4;
+    this.PLANET_IMAGE_WIDTH = 6;
+    this.PLANET_IMAGE_HEIGHT = 6;
     this.PLANET_RADIUS_OFFSET = 3;
     this.PLANET_COLLISION_MARGIN_IN_DEGREE = 4;
     this.PLANET_COLLISION_CORRECTION_RADIUS = 4;
@@ -22,7 +22,8 @@ export class Drawer {
     this.houses = (properties.hasOwnProperty('houses')) ? properties.houses : null;
 
     this.snap = Snap(this.selector);
-    this.snap.attr({viewBox: "-50 -50 100 100"});
+    this.snap.attr({ viewBox: "-50 -50 100 100" });
+    this.snap.clear();
 
     this.drawn = {
       circles: this.drawZodiacCircles(),
@@ -74,7 +75,7 @@ export class Drawer {
       inner: this.snap.circle(0, 0, zodiac.radius.inner),
       innerAuxiliary: this.snap.circle(0, 0, zodiac.radius.innerAuxiliary)
     }
-    
+
     circles.outer.addClass("zodiac-circle-outer");
     circles.inner.addClass("zodiac-circle-inner");
     circles.innerAuxiliary.addClass("zodiac-circle-inner-auxiliary");
@@ -113,8 +114,8 @@ export class Drawer {
   }
 
   drawZodiacSigns(startSign, signDegree) {
-    const zodiacSignImageWidth = 3;
-    const zodiacSignImageHeight = 3;
+    const zodiacSignImageWidth = 6;
+    const zodiacSignImageHeight = 6;
 
     const signs = [];
 
@@ -218,7 +219,7 @@ export class Drawer {
   }
 
   drawHouse2House8Axis() {
-    const house2Degree = (this.houses.hasOwnProperty('axes') && this.houses.axes.hasOwnProperty('axis2to8')) ? this.houses.axes.axis2to8: null;
+    const house2Degree = (this.houses.hasOwnProperty('axes') && this.houses.axes.hasOwnProperty('axis2to8')) ? this.houses.axes.axis2to8 : null;
     const house2Point = Calc.getPointOnCircle(zodiac.radius.outer, house2Degree, -2);
     const house8Point = Calc.getPointOnCircle(zodiac.radius.outer, Calc.getOppositeDegree(house2Degree), -2);
     const house2house8Axis = this.snap.line(house2Point.x, house2Point.y, house8Point.x, house8Point.y);
@@ -228,7 +229,7 @@ export class Drawer {
   }
 
   drawHouse3House9Axis() {
-    const house3Degree = (this.houses.hasOwnProperty('axes') && this.houses.axes.hasOwnProperty('axis3to9')) ? this.houses.axes.axis3to9: null;
+    const house3Degree = (this.houses.hasOwnProperty('axes') && this.houses.axes.hasOwnProperty('axis3to9')) ? this.houses.axes.axis3to9 : null;
     const house3Point = Calc.getPointOnCircle(zodiac.radius.outer, house3Degree, -2);
     const house9Point = Calc.getPointOnCircle(zodiac.radius.outer, Calc.getOppositeDegree(house3Degree), -2);
     const house3house9Axis = this.snap.line(house3Point.x, house3Point.y, house9Point.x, house9Point.y);
@@ -238,7 +239,7 @@ export class Drawer {
   }
 
   drawImmumMediumCoelliAxis() {
-    const immumCoelliDegree = (this.houses.hasOwnProperty('axes') && this.houses.axes.hasOwnProperty('axis4to10')) ? this.houses.axes.axis4to10: null;
+    const immumCoelliDegree = (this.houses.hasOwnProperty('axes') && this.houses.axes.hasOwnProperty('axis4to10')) ? this.houses.axes.axis4to10 : null;
     const immumCoelliPoint = Calc.getPointOnCircle(zodiac.radius.outer, immumCoelliDegree, -2);
     const mediumCoelliPoint = Calc.getPointOnCircle(zodiac.radius.outer, Calc.getOppositeDegree(immumCoelliDegree), -2);
     const immumMediumCoelliAxis = this.snap.line(immumCoelliPoint.x, immumCoelliPoint.y, mediumCoelliPoint.x, mediumCoelliPoint.y);
@@ -248,7 +249,7 @@ export class Drawer {
   }
 
   drawHouse5House11Axis() {
-    const house5Degree = (this.houses.hasOwnProperty('axes') && this.houses.axes.hasOwnProperty('axis5to11')) ? this.houses.axes.axis5to11: null;
+    const house5Degree = (this.houses.hasOwnProperty('axes') && this.houses.axes.hasOwnProperty('axis5to11')) ? this.houses.axes.axis5to11 : null;
     const house5Point = Calc.getPointOnCircle(zodiac.radius.outer, house5Degree, -2);
     const house11Point = Calc.getPointOnCircle(zodiac.radius.outer, Calc.getOppositeDegree(house5Degree), -2);
     const house5house11Axis = this.snap.line(house5Point.x, house5Point.y, house11Point.x, house11Point.y);
@@ -258,7 +259,7 @@ export class Drawer {
   }
 
   drawHouse6House12Axis() {
-    const house6Degree = (this.houses.hasOwnProperty('axes') && this.houses.axes.hasOwnProperty('axis6to12')) ? this.houses.axes.axis6to12: null;
+    const house6Degree = (this.houses.hasOwnProperty('axes') && this.houses.axes.hasOwnProperty('axis6to12')) ? this.houses.axes.axis6to12 : null;
     const house6Point = Calc.getPointOnCircle(zodiac.radius.outer, house6Degree, -2);
     const house12Point = Calc.getPointOnCircle(zodiac.radius.outer, Calc.getOppositeDegree(house6Degree), -2);
     const house6house12Axis = this.snap.line(house6Point.x, house6Point.y, house12Point.x, house12Point.y);
