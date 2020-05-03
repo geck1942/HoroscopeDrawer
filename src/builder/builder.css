@@ -15,7 +15,7 @@ body{
   color: rgb(187, 138, 54);
 } 
 .tool { 
-  height: 48px; 
+  min-height: 32px; 
 }
  
 svg { 
@@ -50,13 +50,13 @@ path {
 .house-number{
   font-family: Georgia, 'Times New Roman', Times, serif;
   fill: rgb(187, 138, 54);
-  font-size: 0.2em;
+  font-size: 0.175em;
   text-align: center;
   letter-spacing: -0.1em;
 }
 
-.text-planets{
-  width:100%;
+.text-planets, .text-houses{
+    width:100%;
 }
 /* 
 .zodiac-sign-element-wind {

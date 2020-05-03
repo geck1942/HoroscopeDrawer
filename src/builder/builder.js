@@ -37,36 +37,74 @@ refresh();
 function draw() {
   console.log(properties);
   drawn = h.draw("#horoscope");
-  console.log("Hurray! You have drawn your horoscope.", drawn);
+  //console.log("Hurray! You have drawn your horoscope.", drawn);
 }
 function refresh() {
-  properties.zodiac.ascendant.sign = document.getElementById("tools_input_asc").value - 0;
-  properties.zodiac.ascendant.degree = document.getElementById("tools_input_ascdeg").value - 0;
-  properties.houses.hasHouses = document.getElementById("tools_draw_houses").checked;
+  parseAsc(document.getElementById("tools_planets").value);
   parsePlanets(document.getElementById("tools_planets").value);
+  properties.houses.hasHouses = parseHouses(document.getElementById("tools_houses").value)
   draw();
 }
 
 function initTools() {
   // houses 
-  document.getElementById("tools_draw_houses").onchange = refresh;
-  document.getElementById("tools_input_asc").onchange = refresh;
-  document.getElementById("tools_input_ascdeg").onchange = refresh;
-  document.getElementById("tools_planets").onkeyup = refresh;
-  document.getElementById("tools_planets").onchange = refresh;
+  document.getElementById("tools_planets").onkeyup =
+    document.getElementById("tools_planets").onchange = refresh;
+  document.getElementById("tools_houses").onkeyup =
+    document.getElementById("tools_houses").onchange = refresh;
 
-  // sign list
-  var tools_input_asc = document.getElementById("tools_input_asc");
-  h.zodiac.signs.forEach(sign => {
-    var option_sign = document.createElement("option");
-    option_sign.text = sign.name;
-    option_sign.value = sign.number;
-    tools_input_asc.options.add(option_sign);
+  // // sign list
+  // var tools_input_asc = document.getElementById("tools_input_asc");
+  // h.zodiac.signs.forEach(sign => {
+  //   var option_sign = document.createElement("option");
+  //   option_sign.text = sign.name;
+  //   option_sign.value = sign.number;
+  //   tools_input_asc.options.add(option_sign);
+  // });
+  // tools_input_asc.onchange = function () {
+  //   refresh();
+  // };
+
+}
+
+function parseHouses(text) {
+  var reg_houseposition = new RegExp(/House\s?([\d]+)\s+([\d]+)°([\d]+)'\s*([\w]+)(\n|$)/ig);
+  var matches = text.match(reg_houseposition);
+  properties.houses.axes = [];
+  if (!matches)
+    return false;
+  matches.forEach(match => {
+    var house = match.replace(reg_houseposition, "$1") - 0;
+    var sign = h.zodiac.signs.find((elem) => {
+      return elem.name == match.replace(reg_houseposition, "$4");
+    });
+    if (sign) {
+      var basedegrees = (sign.number - properties.zodiac.ascendant.sign) * 30 - properties.zodiac.ascendant.degree;
+      if (basedegrees < 0) basedegrees += 360;
+      else if (basedegrees >= 360) basedegrees -= 360;
+      var degrees = match.replace(reg_houseposition, "$2") - 0;
+      var minutes = match.replace(reg_houseposition, "$3") - 0;
+      properties.houses.axes.push((degrees + (minutes / 60) + basedegrees) % 360);
+    }
   });
-  tools_input_asc.onchange = function () {
-    refresh();
-  };
+  return true;
+}
 
+function parseAsc(text) {
+  var reg_ascposition = new RegExp(/AS\s*([\d]+)°([\d]+)'\s*Я?\s*([\w]+)(\n|$)/);
+  var matches = text.match(reg_ascposition);
+  if (!matches || matches.length == 0)
+    return false;
+  var sign = h.zodiac.signs.find((elem) => {
+    return elem.name == matches[0].replace(reg_ascposition, "$3");
+  });
+  if (!sign)
+    return false;
+  properties.zodiac.ascendant.sign = sign.number;
+  var degrees = matches[0].replace(reg_ascposition, "$1") - 0;
+  var minutes = matches[0].replace(reg_ascposition, "$2") - 0;
+  properties.zodiac.ascendant.degree = degrees + (minutes / 60);
+  return true;
 }
 
 function parsePlanets(text) {
@@ -82,11 +120,12 @@ function parsePlanets(text) {
     });
     if (planet && sign) {
 
-      var signdegrees = (sign.number - properties.zodiac.ascendant.sign) * 30 - properties.zodiac.ascendant.degree;
-      if (signdegrees < 0) signdegrees += 360;
+      var basedegrees = (sign.number - properties.zodiac.ascendant.sign) * 30 - properties.zodiac.ascendant.degree;
+      if (basedegrees < 0) basedegrees += 360;
+      else if (basedegrees >= 360) basedegrees -= 360;
       var degrees = match.replace(reg_planetposition, "$2") - 0;
       var minutes = match.replace(reg_planetposition, "$3") - 0;
-      properties.planets[planet.name.toLowerCase()] = degrees + (minutes / 60) + signdegrees;
+      properties.planets[planet.name.toLowerCase()] = (degrees + (minutes / 60) + basedegrees) % 360;
     }
   });
 }

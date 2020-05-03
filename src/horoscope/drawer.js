@@ -208,18 +208,18 @@ export class Drawer {
   drawHouses() {
     const axis = [];
     if (!this.houses.hasHouses) return null;
-    axis.push(this.drawHouseAxis(0, "house-axis-ascendant-descendant"))
-    axis.push(this.drawHouseAxis(this.houses.axes.axis2to8, "house-axis-2-8"))
-    axis.push(this.drawHouseAxis(this.houses.axes.axis3to9, "house-axis-3-9"))
-    axis.push(this.drawHouseAxis(this.houses.axes.axis4to10, "house-axis-immum-medium"))
-    axis.push(this.drawHouseAxis(this.houses.axes.axis5to11, "house-axis-5-11"))
-    axis.push(this.drawHouseAxis(this.houses.axes.axis6to12, "house-axis-6-12"))
-    axis.push(this.drawHouseAxis(180, "house-axis-ascendant-descendant"))
-    axis.push(this.drawHouseAxis(Calc.getOppositeDegree(this.houses.axes.axis2to8), "house-axis-2-8"))
-    axis.push(this.drawHouseAxis(Calc.getOppositeDegree(this.houses.axes.axis3to9), "house-axis-3-9"))
-    axis.push(this.drawHouseAxis(Calc.getOppositeDegree(this.houses.axes.axis4to10), "house-axis-immum-medium"))
-    axis.push(this.drawHouseAxis(Calc.getOppositeDegree(this.houses.axes.axis5to11), "house-axis-5-11"))
-    axis.push(this.drawHouseAxis(Calc.getOppositeDegree(this.houses.axes.axis6to12), "house-axis-6-12"))
+    axis.push(this.drawHouseAxis("house-axis-ascendant-descendant", 0))
+    axis.push(this.drawHouseAxis("house-axis-2-8", 1))
+    axis.push(this.drawHouseAxis("house-axis-3-9", 2))
+    axis.push(this.drawHouseAxis("house-axis-immum-medium", 3))
+    axis.push(this.drawHouseAxis("house-axis-5-11", 4))
+    axis.push(this.drawHouseAxis("house-axis-6-12", 5))
+    axis.push(this.drawHouseAxis("house-axis-ascendant-descendant", 6))
+    axis.push(this.drawHouseAxis("house-axis-2-8", 7))
+    axis.push(this.drawHouseAxis("house-axis-3-9", 8))
+    axis.push(this.drawHouseAxis("house-axis-immum-medium", 9))
+    axis.push(this.drawHouseAxis("house-axis-5-11", 10))
+    axis.push(this.drawHouseAxis("house-axis-6-12", 11))
 
     var asc_point = Calc.getPointOnCircle(this.radius.houses_outer, 0);
     this.snap.image("./resources/celestialchapters/planets/asc.png", asc_point.x - this.PLANET_IMAGE_WIDTH / 2, asc_point.y - this.PLANET_IMAGE_HEIGHT / 2, this.PLANET_IMAGE_WIDTH, this.PLANET_IMAGE_HEIGHT);
@@ -238,23 +238,25 @@ export class Drawer {
   drawHousesNumbers() {
     if (!this.houses.hasHouses) return null;
     var numbers = [
-      this.drawHouseNumber("I", 0, this.houses.axes.axis2to8),
-      this.drawHouseNumber("II", this.houses.axes.axis2to8, this.houses.axes.axis3to9),
-      this.drawHouseNumber("III", this.houses.axes.axis3to9, this.houses.axes.axis4to10),
-      this.drawHouseNumber("IV", this.houses.axes.axis4to10, this.houses.axes.axis5to11),
-      this.drawHouseNumber("V", this.houses.axes.axis5to11, this.houses.axes.axis6to12),
-      this.drawHouseNumber("VI", this.houses.axes.axis6to12, 180),
-      this.drawHouseNumber("VII", 180, Calc.getOppositeDegree(this.houses.axes.axis2to8)),
-      this.drawHouseNumber("VIII", Calc.getOppositeDegree(this.houses.axes.axis2to8), Calc.getOppositeDegree(this.houses.axes.axis3to9)),
-      this.drawHouseNumber("IX", Calc.getOppositeDegree(this.houses.axes.axis3to9), Calc.getOppositeDegree(this.houses.axes.axis4to10)),
-      this.drawHouseNumber("X", Calc.getOppositeDegree(this.houses.axes.axis4to10), Calc.getOppositeDegree(this.houses.axes.axis5to11)),
-      this.drawHouseNumber("XI", Calc.getOppositeDegree(this.houses.axes.axis5to11), Calc.getOppositeDegree(this.houses.axes.axis6to12)),
-      this.drawHouseNumber("XII", Calc.getOppositeDegree(this.houses.axes.axis6to12), 360)
+      this.drawHouseNumber("I", 0),
+      this.drawHouseNumber("II", 1),
+      this.drawHouseNumber("III", 2),
+      this.drawHouseNumber("IV", 3),
+      this.drawHouseNumber("V", 4),
+      this.drawHouseNumber("VI", 5),
+      this.drawHouseNumber("VII", 6),
+      this.drawHouseNumber("VIII", 7),
+      this.drawHouseNumber("IX", 8),
+      this.drawHouseNumber("X", 9),
+      this.drawHouseNumber("XI", 10),
+      this.drawHouseNumber("XII", 11)
     ];
     return numbers;
   }
-  drawHouseNumber(text, start_degree, end_degree) {
-    var degree = (start_degree + end_degree) / 2;
+  drawHouseNumber(text, index) {
+    var start = properties.houses.axes[index];
+    var end = properties.houses.axes[index == 11 ? 0 : index + 1];
+    var degree = ((start + end) / 2) + (end < start ? 180 : 0);
     var point = Calc.getPointOnCircle(this.radius.houses_center, degree, 0);
     var number = this.snap.text(point.x, point.y, text);
     number.addClass("house-number");
@@ -266,7 +268,8 @@ export class Drawer {
     return number;
   }
 
-  drawHouseAxis(axeDegree, className) {
+  drawHouseAxis(className, index) {
+    var axeDegree = properties.houses.axes[index];
     var points = [
       Calc.getPointOnCircle(this.radius.houses_outertick, axeDegree),
       Calc.getPointOnCircle(this.radius.zodiac_inner, axeDegree, 0),
