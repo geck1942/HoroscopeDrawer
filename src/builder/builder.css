@@ -13,32 +13,44 @@ body{
   flex-direction: column;
 } 
 .tool { 
-  height: 48px;
+  height: 48px; 
 }
-
-   
-
+ 
 svg { 
-  display: block;
+  display: block;    
   margin: 0 auto;
   max-width: 90vw;
   max-height: 90vh;
-}
+} 
 
 circle {
   fill: transparent;
+} 
+.houses-circle-outer
+{
+  stroke: rgb(187, 138, 54);
+  stroke-width: 0.25px;
 }
-
 line {
   fill: transparent;
   stroke: rgb(187, 138, 54);
   stroke-width: 0.25px;
 }
-
+.zodiac-degree
+{
+  stroke-width: 0.15px;
+}
 path { 
   fill: transparent;
   stroke: rgb(187, 138, 54);
   stroke-width: 0.25px;
+}
+.house-number{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  fill: rgb(187, 138, 54);
+  font-size: 0.2em;
+  text-align: center;
+  letter-spacing: -0.1em;
 }
 /* 
 .zodiac-sign-element-wind {

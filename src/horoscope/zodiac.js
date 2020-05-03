@@ -3,16 +3,6 @@ import { elements } from "./elements";
 export class Zodiac {
   constructor() {
     this.pngImagePath = "./resources/celestialchapters/signs/";
-    this.radius = {
-      outer: 50,
-      inner: 43,
-      get innerAuxiliary() {
-        return this.inner + 0.5;
-      },
-      get betweenOuterInner() {
-        return this.outer - ((this.outer - this.inner) / 2);
-      }
-    };
     this.signs = [{
       number: 0,
       name: "Aries",

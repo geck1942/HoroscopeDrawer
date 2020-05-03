@@ -41,6 +41,12 @@ function draw() {
 }
 
 function initTools() {
+  // houses 
+  var tools_draw_houses = document.getElementById("tools_draw_houses");
+  tools_draw_houses.onchange = function () {
+    properties.houses.hasHouses = tools_draw_houses.checked;
+    draw();
+  }
   // Ascendant
   var tools_input_asc = document.getElementById("tools_input_asc");
   tools_input_asc.options = [];
