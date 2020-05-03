@@ -13,16 +13,17 @@ export class Drawer {
 
     this.PLANET_IMAGE_WIDTH = 8;
     this.PLANET_IMAGE_HEIGHT = 8;
-    this.PLANET_RADIUS_OFFSET = 5;
-    this.PLANET_COLLISION_MARGIN_IN_DEGREE = 4;
-    this.PLANET_COLLISION_CORRECTION_RADIUS = 4;
-    this.MAX_PLANET_COLLISION_CORRECTION = 4;
+    this.PLANET_RADIUS_OFFSET = 7;
+    this.PLANET_COLLISION_MARGIN_IN_DEGREE = 8;
+    this.PLANET_COLLISION_CORRECTION_RADIUS = 5;
+    this.MAX_PLANET_COLLISION_CORRECTION = 8;
 
     this.radius = {
-      outer: 49
+      outer: 49.5
     };
     if (properties.houses.hasHouses) {
-      this.radius.houses_outer = this.radius.outer;
+      this.radius.houses_outertick = this.radius.outer;
+      this.radius.houses_outer = this.radius.houses_outertick - 4;
       this.radius.houses_inner = this.radius.houses_outer - 4;
       this.radius.houses_center = (this.radius.houses_outer + this.radius.houses_inner) / 2;
       this.radius.zodiac_outer = this.radius.houses_inner;
@@ -219,6 +220,10 @@ export class Drawer {
     axis.push(this.drawHouseAxis(Calc.getOppositeDegree(this.houses.axes.axis4to10), "house-axis-immum-medium"))
     axis.push(this.drawHouseAxis(Calc.getOppositeDegree(this.houses.axes.axis5to11), "house-axis-5-11"))
     axis.push(this.drawHouseAxis(Calc.getOppositeDegree(this.houses.axes.axis6to12), "house-axis-6-12"))
+
+    var asc_point = Calc.getPointOnCircle(this.radius.houses_outer, 0);
+    this.snap.image("./resources/celestialchapters/planets/asc.png", asc_point.x - this.PLANET_IMAGE_WIDTH / 2, asc_point.y - this.PLANET_IMAGE_HEIGHT / 2, this.PLANET_IMAGE_WIDTH, this.PLANET_IMAGE_HEIGHT);
+
     return axis;
   }
   drawHousesCircles() {
@@ -263,17 +268,23 @@ export class Drawer {
 
   drawHouseAxis(axeDegree, className) {
     var points = [
-      Calc.getPointOnCircle(this.radius.houses_outer + 2, axeDegree),
-      Calc.getPointOnCircle(this.radius.zodiac_inner, axeDegree, 0)
+      Calc.getPointOnCircle(this.radius.houses_outertick, axeDegree),
+      Calc.getPointOnCircle(this.radius.zodiac_inner, axeDegree, 0),
+      Calc.getPointOnCircle(this.radius.houses_outertick, axeDegree - 1),
+      Calc.getPointOnCircle(this.radius.houses_outertick, axeDegree + 1)
     ]
     var line = this.snap.line(points[0].x, points[0].y, points[1].x, points[1].y);
     line.addClass("house-axis");
+    var tick = this.snap.line(points[2].x, points[2].y, points[3].x, points[3].y);
+    tick.addClass("house-axis");
     if (className)
       line.addClass(className);
     return line;
   }
 
   drawPlanet(planet, degree) {
+    if (!planet || degree == null)
+      return;
     const linePoint1 = Calc.getPointOnCircle(this.radius.planets, degree);
     const linePoint2 = Calc.getPointOnCircle(this.radius.planets, degree, 1);
     const planetAuxiliaryLine = this.snap.line(linePoint1.x, linePoint1.y, linePoint2.x, linePoint2.y);
@@ -383,7 +394,12 @@ export class Drawer {
 
     let planetsCollideInRow = 0;
     return planets.map((planet, i) => {
-      const nextPlanetIndex = i + 1;
+      var nextPlanetIndex = i + 1;
+      while (!planets[nextPlanetIndex] && nextPlanetIndex != i) {
+        nextPlanetIndex++;
+        if (nextPlanetIndex >= planets.length)
+          nextPlanetIndex = 0;
+      }
 
       if (nextPlanetIndex in planets) {
         const nextPlanet = planets[nextPlanetIndex];

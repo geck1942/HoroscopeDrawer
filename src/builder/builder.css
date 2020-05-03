@@ -1,16 +1,18 @@
 
 body{
   display: flex;
+  background: url(./resources/celestialchapters/backgrounds/CCbackgroundblue.jpg);
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 .preview {
   width: 62%;  
   padding: 1em; 
-  background: url(./resources/celestialchapters/backgrounds/CCbackgroundblue.jpg);
 }
 .tools {
   width: 38%;
   display: flex;
   flex-direction: column;
+  color: rgb(187, 138, 54);
 } 
 .tool { 
   height: 48px; 
@@ -51,6 +53,10 @@ path {
   font-size: 0.2em;
   text-align: center;
   letter-spacing: -0.1em;
+}
+
+.text-planets{
+  width:100%;
 }
 /* 
 .zodiac-sign-element-wind {
