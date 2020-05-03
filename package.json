@@ -6,14 +6,10 @@
   "scripts": {
     "test": "mocha --compilers js:babel-core/register"
   },
-  "author": {
-    "name": "Samuel Lissner",
-    "email": "samuel.lissner@hotmail.com",
-    "url": "http://www.slissner.de"
-  },
+  "author": "Samuel Lissner <samuel.lissner@hotmail.com> (http://www.slissner.de)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/slissner/HoroscopeDrawer.git"
+    "url": "git+https://github.com/slissner/HoroscopeDrawer.git"
   },
   "bugs": {
     "url": "https://github.com/slissner/HoroscopeDrawer/issues"
@@ -26,11 +22,16 @@
     "browserify": "^13.1.1",
     "del": "^2.2.2",
     "exorcist": "^0.4.0",
-    "gulp": "gulpjs/gulp#4.0",
+    "gulp": "github:gulpjs/gulp",
     "mocha": "^3.2.0",
     "require-dir": "^0.3.1"
   },
   "dependencies": {
+    "gulp-util": "^3.0.8",
     "snapsvg": "^0.4.0"
+  },
+  "homepage": "https://github.com/slissner/HoroscopeDrawer#readme",
+  "directories": {
+    "test": "test"
   }
 }

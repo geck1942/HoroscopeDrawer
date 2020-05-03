@@ -1,5 +1,7 @@
 dist/
 example/
+builder/
+!src/*
 !src/example
 node_modules/
 *.iml
