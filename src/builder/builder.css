@@ -5,11 +5,11 @@ body{
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 .preview {
-  width: 62%;  
+  min-width: 62%;  
   padding: 1em; 
 }
 .tools {
-  width: 38%;
+  width: 340px;
   display: flex;
   flex-direction: column;
   color: rgb(187, 138, 54);
@@ -57,6 +57,12 @@ path {
 
 .text-planets, .text-houses{
     width:100%;
+}
+iframe{
+  height: 0;
+  width: 0;
+  border: none;
+  visibility: hidden;
 }
 /* 
 .zodiac-sign-element-wind {

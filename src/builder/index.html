@@ -12,10 +12,6 @@
 </head>
 
 <body>
-  <div class="preview">
-    <svg id="horoscope"></svg>
-
-  </div>
   <div class="tools">
     <div class="tool">
       <h2>Positions of Planets</h2>
@@ -57,9 +53,14 @@ House 11	17°02'	Leo
 House 12	16°27'	Virgo
       </textarea>
     </div>
+    <button id="button_save">save picture</button>
+  </div>
+  <div class="preview">
+    <svg id="horoscope"></svg>
+
   </div>
 
-  </canvas>
+  <iframe id="saveimg" name="saveimg"></iframe>
   <script type="text/javascript" src="horoscope-drawer.js"></script>
   <script type="text/javascript" src="builder.js"></script>
 </body>

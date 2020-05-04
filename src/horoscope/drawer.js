@@ -73,7 +73,8 @@ export class Drawer {
         this.drawUranus(),
         this.drawNeptune(),
         this.drawPluto()
-      ]
+      ],
+      snap: this.snap
     };
 
     this.drawn.planets = this.correctCollidingPlanets(this.drawn.planets);

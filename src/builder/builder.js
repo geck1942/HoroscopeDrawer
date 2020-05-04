@@ -46,12 +46,17 @@ function refresh() {
   draw();
 }
 
+function save() {
+  window.open(drawn.snap.toDataURL("image/png").replace(/^data:image\/[^;]/, 'data:application/octet-stream'), "saveimg");
+}
+
 function initTools() {
   // houses 
   document.getElementById("tools_planets").onkeyup =
     document.getElementById("tools_planets").onchange = refresh;
   document.getElementById("tools_houses").onkeyup =
     document.getElementById("tools_houses").onchange = refresh;
+  document.getElementById("button_save").onclick = save;
 
   // // sign list
   // var tools_input_asc = document.getElementById("tools_input_asc");
