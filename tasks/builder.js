@@ -12,13 +12,13 @@ gulp.task('builder-clean', function () {
 
 gulp.task('builder-copy-dist', (done) => {
   gulp.src('dist/**/*')
-    .pipe(gulp.dest('builder/'));
+    .pipe(gulp.dest('celestialhoroscope/'));
   done();
 });
 
 gulp.task('builder-copy', (done) => {
   gulp.src('src/builder/**/*.{php,html,js,txt,xml,png,jpg,gif,gpg,css}')
-    .pipe(gulp.dest('builder/'));
+    .pipe(gulp.dest('celestialhoroscope/'));
   done();
 });
 
