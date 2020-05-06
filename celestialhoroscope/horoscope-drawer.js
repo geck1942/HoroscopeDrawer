@@ -468,8 +468,6 @@ var Calc = exports.Calc = function () {
 
       degree = this.convertDegreeMinutesSecondsToFloat(degree);
 
-      var xCenterPoint = 0;
-      var yCenterPoint = 0;
       var degreeNormalized = degree * (Math.PI / 180.0);
 
       // Fixes JS bug of Math.sin(Math.PI) (or Math.cos(Math.PI)) not returning correct values on 0, 90, 180, 270, 360
@@ -501,11 +499,11 @@ var Calc = exports.Calc = function () {
       var ySvgInverse = true;
 
       if (offsetFromRadius) {
-        x = xCenterPoint + (radius - offsetFromRadius) * xNormalized;
-        y = yCenterPoint + (radius - offsetFromRadius) * yNormalized;
+        x = (radius - offsetFromRadius) * xNormalized;
+        y = (radius - offsetFromRadius) * yNormalized;
       } else {
-        x = xCenterPoint + radius * xNormalized;
-        y = yCenterPoint + radius * yNormalized;
+        x = radius * xNormalized;
+        y = radius * yNormalized;
       }
 
       if (ySvgInverse) {
@@ -516,7 +514,8 @@ var Calc = exports.Calc = function () {
         x = -x;
         y = -y;
       }
-
+      // realx = snap.node.clientWidth / 2 + (x * snap.node.clientWidth / 100);
+      // realy = snap.node.clientHeight / 2 + (y * snap.node.clientHeight / 100);
       return { x: x, y: y };
     }
   }, {
@@ -619,10 +618,9 @@ var Drawer = exports.Drawer = function () {
 
       this.PLANET_IMAGE_WIDTH = 8;
       this.PLANET_IMAGE_HEIGHT = 8;
-      this.PLANET_RADIUS_OFFSET = 7;
-      this.PLANET_COLLISION_MARGIN_IN_DEGREE = 8;
+      this.PLANET_COLLISION_MARGIN_IN_DEGREE = this.PLANET_IMAGE_HEIGHT * Math.PI / 4;
       this.PLANET_COLLISION_CORRECTION_RADIUS = 5;
-      this.MAX_PLANET_COLLISION_CORRECTION = 8;
+      this.MAX_PLANET_COLLISION_CORRECTION = 10;
 
       this.radius = {
         outer: 49.5
@@ -641,7 +639,7 @@ var Drawer = exports.Drawer = function () {
       this.radius.zodiac_innertick5 = this.radius.zodiac_inner - 4.5;
       this.radius.zodiac_innertick10 = this.radius.zodiac_inner - 6;
       this.radius.zodiac_center = (this.radius.zodiac_outer + this.radius.zodiac_inner) / 2;
-      this.radius.planets = this.radius.zodiac_inner;
+      this.radius.planets = this.radius.zodiac_inner - 5;
 
       this.planets = properties.hasOwnProperty('planets') ? properties.planets : null;
       this.houses = properties.hasOwnProperty('houses') ? properties.houses : null;
@@ -670,7 +668,7 @@ var Drawer = exports.Drawer = function () {
         snap: this.snap
       };
 
-      this.drawn.planets = this.correctCollidingPlanets(this.drawn.planets);
+      this.correctCollidingPlanets(this.drawn.planets);
 
       return this.drawn;
     }
@@ -852,7 +850,7 @@ var Drawer = exports.Drawer = function () {
     key: "drawHouseAxis",
     value: function drawHouseAxis(className, index) {
       var axeDegree = properties.houses.axes[index];
-      var points = [_calc.Calc.getPointOnCircle(this.radius.houses_outertick, axeDegree), _calc.Calc.getPointOnCircle(this.radius.zodiac_inner, axeDegree, 0), _calc.Calc.getPointOnCircle(this.radius.houses_outertick, axeDegree - 1), _calc.Calc.getPointOnCircle(this.radius.houses_outertick, axeDegree + 1)];
+      var points = [_calc.Calc.getPointOnCircle(this.radius.houses_outertick, axeDegree), _calc.Calc.getPointOnCircle(this.radius.houses_inner, axeDegree, 0), _calc.Calc.getPointOnCircle(this.radius.houses_outertick, axeDegree - 1), _calc.Calc.getPointOnCircle(this.radius.houses_outertick, axeDegree + 1)];
       var line = this.snap.line(points[0].x, points[0].y, points[1].x, points[1].y);
       line.addClass("house-axis");
       var tick = this.snap.line(points[2].x, points[2].y, points[3].x, points[3].y);
@@ -864,12 +862,12 @@ var Drawer = exports.Drawer = function () {
     key: "drawPlanet",
     value: function drawPlanet(planet, degree) {
       if (!planet || degree == null) return;
-      var linePoint1 = _calc.Calc.getPointOnCircle(this.radius.planets, degree);
-      var linePoint2 = _calc.Calc.getPointOnCircle(this.radius.planets, degree, 1);
+      var linePoint1 = _calc.Calc.getPointOnCircle(this.radius.zodiac_inner, degree);
+      var linePoint2 = _calc.Calc.getPointOnCircle(this.radius.planets, degree);
       var planetAuxiliaryLine = this.snap.line(linePoint1.x, linePoint1.y, linePoint2.x, linePoint2.y);
       planetAuxiliaryLine.addClass("planet-auxiliary-line");
 
-      var planetBackgroundPosition = _calc.Calc.getPointOnCircle(this.radius.planets, degree, this.PLANET_RADIUS_OFFSET);
+      var planetBackgroundPosition = _calc.Calc.getPointOnCircle(this.radius.planets, degree);
       var planetBackgroundRadius = this.getPlanetBackgroundRadius();
       var planetBackground = this.snap.circle(planetBackgroundPosition.x, planetBackgroundPosition.y, planetBackgroundRadius);
       planetBackground.addClass("planet-background");
@@ -885,6 +883,7 @@ var Drawer = exports.Drawer = function () {
       return {
         symbol: planetSymbol,
         background: planetBackground,
+        tick: planetAuxiliaryLine,
         meta: meta
       };
     }
@@ -980,66 +979,44 @@ var Drawer = exports.Drawer = function () {
   }, {
     key: "correctCollidingPlanets",
     value: function correctCollidingPlanets(planets) {
-      var _this = this;
-
       planets = planets.sort(function (a, b) {
-        return a.meta.degree > b.meta.degree;
+        return a.meta.degree > b.meta.degree ? 1 : a.meta.degree < b.meta.degree ? -1 : 0;
       });
 
-      var planetsCollideInRow = 0;
-      return planets.map(function (planet, i) {
-        var nextPlanetIndex = i + 1;
-        while (!planets[nextPlanetIndex] && nextPlanetIndex != i) {
-          nextPlanetIndex++;
-          if (nextPlanetIndex >= planets.length) nextPlanetIndex = 0;
+      for (var planetIndex = 0; planetIndex < planets.length; planetIndex++) {
+        var planet = planets[planetIndex];
+        var previousPlanetIndex = planetIndex - 1;
+        while (planets[previousPlanetIndex] == null && previousPlanetIndex != planetIndex) {
+          previousPlanetIndex--;
+          if (previousPlanetIndex < 0) previousPlanetIndex = planets.length - 1;
         }
-
-        if (nextPlanetIndex in planets) {
-          var nextPlanet = planets[nextPlanetIndex];
-          if (_this.planetsDoCollide(planet.meta.degree, nextPlanet.meta.degree)) {
-            if (planetsCollideInRow == _this.MAX_PLANET_COLLISION_CORRECTION) {
-              planetsCollideInRow = 0;
-            }
-            planetsCollideInRow++;
-
-            var correctedRadius = _this.radius.zodiac_inner - planetsCollideInRow * _this.PLANET_COLLISION_CORRECTION_RADIUS;
-            if (correctedRadius <= 0) {
-              console.warn("Cannot draw colliding planets when the correction radius is below 0.");
-            }
-
-            var correctedBackgroundPosition = _calc.Calc.getPointOnCircle(correctedRadius, nextPlanet.meta.degree, _this.PLANET_RADIUS_OFFSET);
-            var correctedBackgroundPositionForCircle = {
-              cx: correctedBackgroundPosition.x,
-              cy: correctedBackgroundPosition.y
-            };
-            nextPlanet.background.attr(correctedBackgroundPositionForCircle);
-
-            var correctedPlanetSymbolPosition = _this.getPlanetSymbolPosition(correctedBackgroundPosition);
-            nextPlanet.symbol.attr(correctedPlanetSymbolPosition);
-
-            planets[nextPlanetIndex].symbol = nextPlanet.symbol;
-            planets[nextPlanetIndex].background = nextPlanet.background;
-          } else {
-            planetsCollideInRow = 0;
-          }
-        }
-
-        return planet;
-      });
+        if (planet == null || previousPlanetIndex == planetIndex) continue;
+        var previousPlanet = planets[previousPlanetIndex];
+        var offset = 0;
+        while (this.planetsDoCollide(previousPlanet, planet, offset) && offset < this.MAX_PLANET_COLLISION_CORRECTION) {
+          offset += 3;
+        }var newPlanetPosition = _calc.Calc.getPointOnCircle(this.radius.planets - offset, planet.meta.degree);
+        planet.symbol.attr(this.getPlanetSymbolPosition(newPlanetPosition));
+        planet.tick.attr({
+          x2: newPlanetPosition.x,
+          y2: newPlanetPosition.y
+        });
+        planet.meta['position'] = newPlanetPosition;
+      }
     }
   }, {
     key: "planetsDoCollide",
-    value: function planetsDoCollide(currentPlanetDegree, nextPlanetDegree) {
-      var lowerBound = currentPlanetDegree - this.PLANET_COLLISION_MARGIN_IN_DEGREE;
-      var upperBound = currentPlanetDegree + this.PLANET_COLLISION_MARGIN_IN_DEGREE;
-
-      if (upperBound > 360) {
-        upperBound = upperBound - 360;
-      } else if (lowerBound < 0) {
-        lowerBound = lowerBound + 360;
-      }
-
-      return lowerBound <= nextPlanetDegree && nextPlanetDegree <= upperBound;
+    value: function planetsDoCollide(previousPlanet, planet, tryWithOffset) {
+      //console.log("comparing " + currentPlanetDegree + " & " + nextPlanetDegree);
+      var xy2 = _calc.Calc.getPointOnCircle(this.radius.planets - tryWithOffset, planet.meta.degree);
+      var x1 = previousPlanet.meta.position.x; // * this.snap.node.clientWidth / 100;
+      var x2 = xy2.x; // * this.snap.node.clientWidth / 100;
+      var y1 = previousPlanet.meta.position.y; // * this.snap.node.clientHeight / 100;
+      var y2 = xy2.y; // * this.snap.node.clientHeight / 100;
+      var distSq = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+      var radSumSq = this.PLANET_COLLISION_MARGIN_IN_DEGREE * this.PLANET_COLLISION_MARGIN_IN_DEGREE;
+      //console.log("comparing " + distSq + " x " + radSumSq);
+      return distSq < radSumSq;
     }
   }]);
 

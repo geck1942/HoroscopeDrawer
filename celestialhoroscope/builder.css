@@ -38,6 +38,10 @@ line {
   stroke: rgb(187, 138, 54);
   stroke-width: 0.25px;
 }
+.planet-auxiliary-line
+{
+  stroke: #ffffff;
+}
 .zodiac-degree
 {
   stroke-width: 0.15px;

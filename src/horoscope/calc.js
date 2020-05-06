@@ -19,8 +19,6 @@ export class Calc {
 
     degree = this.convertDegreeMinutesSecondsToFloat(degree);
 
-    const xCenterPoint = 0;
-    const yCenterPoint = 0;
     const degreeNormalized = degree * (Math.PI / 180.0);
 
     // Fixes JS bug of Math.sin(Math.PI) (or Math.cos(Math.PI)) not returning correct values on 0, 90, 180, 270, 360
@@ -52,11 +50,11 @@ export class Calc {
     const ySvgInverse = true;
 
     if (offsetFromRadius) {
-      x = xCenterPoint + (radius - offsetFromRadius) * xNormalized;
-      y = yCenterPoint + (radius - offsetFromRadius) * yNormalized;
+      x = (radius - offsetFromRadius) * xNormalized;
+      y = (radius - offsetFromRadius) * yNormalized;
     } else {
-      x = xCenterPoint + radius * xNormalized;
-      y = yCenterPoint + radius * yNormalized;
+      x = radius * xNormalized;
+      y = radius * yNormalized;
     }
 
     if (ySvgInverse) {
@@ -67,8 +65,9 @@ export class Calc {
       x = -x;
       y = -y;
     }
-
-    return {x, y};
+    // realx = snap.node.clientWidth / 2 + (x * snap.node.clientWidth / 100);
+    // realy = snap.node.clientHeight / 2 + (y * snap.node.clientHeight / 100);
+    return { x, y };
   }
 
   static getOppositeDegree(degree) {
@@ -100,10 +99,10 @@ export class Calc {
     degreeMinutes = (degreeObj.hasOwnProperty('minutes')) ? degreeObj.minutes : null;
     degreeSeconds = (degreeObj.hasOwnProperty('seconds')) ? degreeObj.seconds : null;
     if (0 <= degreeMinutes && degreeMinutes <= 60) {
-      degreeMinutes = degreeMinutes * 1/60;
+      degreeMinutes = degreeMinutes * 1 / 60;
     }
     if (0 <= degreeSeconds && degreeSeconds <= 60) {
-      degreeSeconds = degreeSeconds * 1/60^2;
+      degreeSeconds = degreeSeconds * 1 / 60 ^ 2;
     }
 
     return degree + degreeMinutes + degreeSeconds;
